@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Студент</string>
+
+    <!-- Bottom navigation labels -->
+    <string name="nav_home">Сегодня</string>
+    <string name="nav_schedule">Расписание</string>
+    <string name="nav_tasks">Задания</string>
+    <string name="nav_statistics">Статистика</string>
+    <string name="nav_settings">Настройки</string>
+</resources>

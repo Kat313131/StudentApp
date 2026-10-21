@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/text_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:text="Привет, Алексей! 👋" />
+
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="18dp"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:text="Среда, 13 ноября 2026" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_week_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <TextView
+            android:id="@+id/text_lessons_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:text="Пары сегодня" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_lessons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <TextView
+            android:id="@+id/text_no_lessons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="На этот день пар нет 🎉"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:text="Задания на сегодня" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

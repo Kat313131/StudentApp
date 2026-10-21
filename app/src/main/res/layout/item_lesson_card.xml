@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/surface"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/view_accent_stripe"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@color/accent_blue" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="14dp">
+
+            <TextView
+                android:id="@+id/text_subject_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/text_time_range"
+                tools:text="Математический анализ" />
+
+            <TextView
+                android:id="@+id/text_time_range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent_blue"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="09:00–10:30" />
+
+            <TextView
+                android:id="@+id/text_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                app:layout_constraintTop_toBottomOf="@id/text_subject_name"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="🏛 Ауд. 305" />
+
+            <TextView
+                android:id="@+id/text_teacher"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                app:layout_constraintTop_toBottomOf="@id/text_room"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="👤 Проф. Иванов А.М." />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
