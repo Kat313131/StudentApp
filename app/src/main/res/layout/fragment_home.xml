@@ -29,7 +29,7 @@
             android:layout_marginBottom="18dp"
             android:textSize="14sp"
             android:textColor="@color/text_secondary"
-            android:text="Среда, 13 ноября 2026" />
+            android:text="Сегодня" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_week_days"
@@ -85,6 +85,17 @@
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <TextView
+            android:id="@+id/text_no_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Ближайших заданий нет ✅"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
     </LinearLayout>
 

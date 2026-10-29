@@ -23,7 +23,40 @@
         android:name="com.student.scheduler.ui.tasks.TasksFragment"
         android:label="@string/nav_tasks"
         tools:layout="@layout/fragment_tasks"
-        xmlns:tools="http://schemas.android.com/tools" />
+        xmlns:tools="http://schemas.android.com/tools">
+        <action
+            android:id="@+id/action_tasksFragment_to_taskFormFragment"
+            app:destination="@id/taskFormFragment" />
+        <action
+            android:id="@+id/action_tasksFragment_to_taskDetailFragment"
+            app:destination="@id/taskDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/taskDetailFragment"
+        android:name="com.student.scheduler.ui.tasks.TaskDetailFragment"
+        android:label="Задание"
+        tools:layout="@layout/fragment_task_detail"
+        xmlns:tools="http://schemas.android.com/tools">
+        <argument
+            android:name="taskId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_taskDetailFragment_to_taskFormFragment"
+            app:destination="@id/taskFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/taskFormFragment"
+        android:name="com.student.scheduler.ui.tasks.TaskFormFragment"
+        android:label="Задание"
+        tools:layout="@layout/fragment_task_form"
+        xmlns:tools="http://schemas.android.com/tools">
+        <argument
+            android:name="taskId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/statisticsFragment"

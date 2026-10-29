@@ -13,6 +13,7 @@ import com.student.scheduler.adapters.TaskAdapter
 import com.student.scheduler.adapters.WeekDayAdapter
 import com.student.scheduler.viewmodel.HomeViewModel
 
+/** "Сегодня" — today's (or the picked day's) lessons plus upcoming tasks, all from Room. */
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by viewModels()
@@ -24,6 +25,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val recyclerLessons = view.findViewById<RecyclerView>(R.id.recycler_lessons)
         val recyclerTasks = view.findViewById<RecyclerView>(R.id.recycler_tasks)
         val textNoLessons = view.findViewById<TextView>(R.id.text_no_lessons)
+        val textNoTasks = view.findViewById<TextView>(R.id.text_no_tasks)
         val textLessonsHeader = view.findViewById<TextView>(R.id.text_lessons_header)
 
         recyclerLessons.layoutManager = LinearLayoutManager(requireContext())
@@ -47,9 +49,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         viewModel.todayTasks.observe(viewLifecycleOwner) { tasks ->
-            recyclerTasks.adapter = TaskAdapter(tasks) { position, isChecked ->
-                viewModel.onTaskCheckedChanged(position, isChecked)
-            }
+            recyclerTasks.adapter = TaskAdapter(
+                tasks = tasks,
+                onCheckedChange = { taskId, isChecked ->
+                    viewModel.onTaskCheckedChanged(taskId, isChecked)
+                }
+            )
+            val hasTasks = tasks.isNotEmpty()
+            recyclerTasks.visibility = if (hasTasks) View.VISIBLE else View.GONE
+            textNoTasks.visibility = if (hasTasks) View.GONE else View.VISIBLE
         }
     }
 }

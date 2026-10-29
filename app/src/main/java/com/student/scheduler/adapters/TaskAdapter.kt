@@ -13,7 +13,9 @@ import com.student.scheduler.model.TaskUi
 
 class TaskAdapter(
     private val tasks: List<TaskUi>,
-    private val onCheckedChange: (position: Int, isChecked: Boolean) -> Unit
+    private val onCheckedChange: (taskId: Long, isChecked: Boolean) -> Unit,
+    private val onItemClick: ((taskId: Long) -> Unit)? = null,
+    private val onItemLongClick: ((taskId: Long) -> Unit)? = null
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,7 +47,13 @@ class TaskAdapter(
         holder.checkbox.isChecked = task.isDone
         holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
             applyDoneStyle(holder, isChecked)
-            onCheckedChange(holder.bindingAdapterPosition, isChecked)
+            onCheckedChange(task.id, isChecked)
+        }
+
+        holder.itemView.setOnClickListener { onItemClick?.invoke(task.id) }
+        holder.itemView.setOnLongClickListener {
+            onItemLongClick?.invoke(task.id)
+            onItemLongClick != null
         }
     }
 

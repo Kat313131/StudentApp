@@ -1,110 +1,76 @@
 package com.student.scheduler.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.student.scheduler.R
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
+import com.student.scheduler.StudentApplication
 import com.student.scheduler.model.LessonUi
 import com.student.scheduler.model.TaskUi
 import com.student.scheduler.model.WeekDay
+import com.student.scheduler.model.toUi
+import com.student.scheduler.utils.DateFormatting
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Calendar
 
-class HomeViewModel : ViewModel() {
+/**
+ * Backs the "Сегодня" (Home) screen: the selected week day, its lessons
+ * (from Room, mapped to [LessonUi]) and the tasks due in the next 2 days.
+ */
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _weekDays = MutableLiveData<List<WeekDay>>()
-    val weekDays: LiveData<List<WeekDay>> = _weekDays
+    private val app = application as StudentApplication
+    private val scheduleRepository = app.scheduleRepository
+    private val taskRepository = app.taskRepository
 
-    private val _todayLessons = MutableLiveData<List<LessonUi>>()
-    val todayLessons: LiveData<List<LessonUi>> = _todayLessons
+    private val actualTodayIndex: Int = DateFormatting.dayOfWeekIndex(Calendar.getInstance()).coerceIn(0, 5)
+    private val _selectedDayIndex = MutableLiveData(actualTodayIndex)
 
-    private val _lessonsHeader = MutableLiveData<String>()
-    val lessonsHeader: LiveData<String> = _lessonsHeader
-
-    private val _todayTasks = MutableLiveData<List<TaskUi>>()
-    val todayTasks: LiveData<List<TaskUi>> = _todayTasks
-
-    private var selectedDayIndex = 2
-    private val actualTodayIndex = 2
-
-    private val fullDayNames = listOf(
-        "Понедельник", "Вторник", "Среду", "Четверг", "Пятницу", "Субботу"
-    )
-
-    private val lessonsByDay: Map<Int, List<LessonUi>> = mapOf(
-        0 to listOf(
-            LessonUi("Физика (Практика)", "08:30–10:00", "Ауд. 110", "Проф. Петрова Е.В.", R.color.accent_coral),
-            LessonUi("Иностранный язык", "10:15–11:45", "Ауд. 202", "Доц. Кузнецова Л.И.", R.color.accent_green)
-        ),
-        1 to listOf(
-            LessonUi("Математический анализ", "09:00–10:30", "Ауд. 305", "Проф. Иванов А.М.", R.color.accent_blue),
-            LessonUi("Программирование", "10:45–12:15", "Ауд. 408", "Доц. Сидоров К.П.", R.color.accent_green)
-        ),
-        2 to listOf(
-            LessonUi("Математический анализ", "09:00–10:30", "Ауд. 305", "Проф. Иванов А.М.", R.color.accent_blue),
-            LessonUi("Физика (Лекция)", "10:45–12:15", "Ауд. 112", "Проф. Петрова Е.В.", R.color.accent_coral),
-            LessonUi("Программирование", "13:00–14:30", "Ауд. 408", "Доц. Сидоров К.П.", R.color.accent_green)
-        ),
-        3 to listOf(
-            LessonUi("Иностранный язык", "09:00–10:30", "Ауд. 202", "Доц. Кузнецова Л.И.", R.color.accent_green),
-            LessonUi("Математический анализ", "10:45–12:15", "Ауд. 305", "Проф. Иванов А.М.", R.color.accent_blue)
-        ),
-        4 to listOf(
-            LessonUi("Программирование", "09:00–10:30", "Ауд. 408", "Доц. Сидоров К.П.", R.color.accent_green),
-            LessonUi("Физика (Практика)", "10:45–12:15", "Ауд. 110", "Проф. Петрова Е.В.", R.color.accent_coral)
-        ),
-        5 to emptyList()
-    )
-
-    init {
-        loadMockWeekDays()
-        loadMockTasks()
-        showLessonsForSelectedDay()
-    }
-
-    private fun loadMockWeekDays() {
-        val names = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб")
-        val numbers = listOf(11, 12, 13, 14, 15, 16)
-        _weekDays.value = names.indices.map { index ->
-            WeekDay(names[index], numbers[index], isSelected = index == selectedDayIndex)
+    val weekDays: LiveData<List<WeekDay>> = _selectedDayIndex.map { selected ->
+        DateFormatting.WEEK_DAY_SHORT_NAMES.mapIndexed { index, name ->
+            val dayNumber = dayNumberFor(index)
+            WeekDay(name, dayNumber, isSelected = index == selected)
         }
     }
 
-    private fun loadMockTasks() {
-        _todayTasks.value = listOf(
-            TaskUi(
-                title = "Лабораторная работа №3",
-                dueLabel = "Срок: Сегодня, 18:00",
-                tagName = "Физика",
-                tagColor = R.color.accent_coral
-            ),
-            TaskUi(
-                title = "Домашнее задание №5",
-                dueLabel = "Срок: До завтра",
-                tagName = "Мат. анализ",
-                tagColor = R.color.accent_blue
-            )
-        )
+    val lessonsHeader: LiveData<String> = _selectedDayIndex.map { selected ->
+        if (selected == actualTodayIndex) "Пары сегодня" else "Пары — ${DateFormatting.WEEK_DAY_FULL_NAMES[selected]}"
     }
 
-    private fun showLessonsForSelectedDay() {
-        _todayLessons.value = lessonsByDay[selectedDayIndex].orEmpty()
-        _lessonsHeader.value = if (selectedDayIndex == actualTodayIndex) {
-            "Пары сегодня"
-        } else {
-            "Пары — ${fullDayNames[selectedDayIndex]}"
-        }
+    /** Re-queries Room whenever the selected day changes (switchMap keeps only the latest observer alive). */
+    val todayLessons: LiveData<List<LessonUi>> = _selectedDayIndex.switchMap { day ->
+        scheduleRepository.observeLessonsForDay(day).map { list -> list.map { it.toUi() } }
+    }
+
+    private val today = DateFormatting.startOfDay(Calendar.getInstance())
+    private val horizonEnd = today + 2 * DateFormatting.DAY_MILLIS
+
+    val todayTasks: LiveData<List<TaskUi>> = taskRepository.observeDueBetween(today, horizonEnd).map { list -> list.map { it.toUi() } }
+
+    /** True while the lessons list for the selected day is still empty. Drives the empty-state view. */
+    val hasLessons: LiveData<Boolean> = todayLessons.map { it.isNotEmpty() }
+
+    fun dayNumberFor(index: Int): Int {
+        val calendar = Calendar.getInstance()
+        val diff = index - actualTodayIndex
+        calendar.add(Calendar.DAY_OF_MONTH, diff)
+        return calendar.get(Calendar.DAY_OF_MONTH)
     }
 
     fun selectDay(position: Int) {
-        if (position == selectedDayIndex) return
-        selectedDayIndex = position
-        loadMockWeekDays()
-        showLessonsForSelectedDay()
+        if (position == _selectedDayIndex.value) return
+        _selectedDayIndex.value = position
     }
 
-    fun onTaskCheckedChanged(position: Int, isChecked: Boolean) {
-        val current = _todayTasks.value.orEmpty().toMutableList()
-        if (position !in current.indices) return
-        current[position] = current[position].copy(isDone = isChecked)
-        _todayTasks.value = current
+    /** Persists the checkbox toggle from the task card in the background. */
+    fun onTaskCheckedChanged(taskId: Long, isChecked: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            taskRepository.setDone(taskId, isChecked)
+        }
     }
 }
