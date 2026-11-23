@@ -84,7 +84,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
         chipOnlyPending.setOnCheckedChangeListener { _, isChecked -> viewModel.setOnlyPending(isChecked) }
 
-        var sortMode = 0
+        var sortMode = viewModel.currentSortMode()
         buttonSort.text = sortLabels[sortMode]
         buttonSort.setOnClickListener {
             PopupMenu(requireContext(), buttonSort).apply {

@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_pill"
+        android:background="@drawable/bg_card"
         app:tabMode="fixed"
         app:tabGravity="fill"
         app:tabIndicator="@drawable/bg_day_selected"

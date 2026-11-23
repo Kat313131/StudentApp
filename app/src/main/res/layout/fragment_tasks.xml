@@ -25,7 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/bg_pill"
+        android:background="@drawable/bg_card"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:drawablePadding="8dp"
         android:hint="Поиск заданий"
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_pill"
+                android:background="@drawable/bg_card"
                 android:minWidth="140dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp" />

@@ -1,0 +1,10 @@
+<resources>
+    <!-- Dark variant of the mockup palette, used when "Тёмная тема" is on. -->
+    <color name="background">#15130F</color>
+    <color name="surface">#221F19</color>
+    <color name="accent_coral">#E4664A</color>
+    <color name="accent_blue">#5C8FD4</color>
+    <color name="accent_green">#7CB56C</color>
+    <color name="text_primary">#F2EEE6</color>
+    <color name="text_secondary">#A79E90</color>
+</resources>

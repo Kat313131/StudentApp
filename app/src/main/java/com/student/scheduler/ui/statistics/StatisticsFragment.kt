@@ -78,10 +78,13 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
         chart.setHoleColor(Color.TRANSPARENT)
         chart.centerText = "${stats.completionPercent}%\nвыполнено"
         chart.setCenterTextSize(13f)
+        chart.setCenterTextColor(requireContext().getColor(R.color.text_primary))
         chart.setUsePercentValues(false)
 
         chart.legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         chart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+        chart.legend.textColor = requireContext().getColor(R.color.text_primary)
+        chart.legend.textSize = 12f
         chart.setExtraOffsets(8f, 8f, 8f, 8f)
         chart.invalidate()
     }
@@ -94,6 +97,9 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
         }
         chart.visibility = View.VISIBLE
         textNoData.visibility = View.GONE
+
+        val textPrimary = requireContext().getColor(R.color.text_primary)
+        val textSecondary = requireContext().getColor(R.color.text_secondary)
 
         val entries = stats.bySubject.mapIndexed { index, subject -> BarEntry(index.toFloat(), subject.percent.toFloat()) }
         val colors = stats.bySubject.map { requireContext().getColor(it.accentColor) }
@@ -111,6 +117,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
         val dataSet = BarDataSet(entries, "Успеваемость, %").apply {
             setColors(colors)
             valueTextSize = 11f
+            valueTextColor = textPrimary
         }
 
         chart.data = BarData(dataSet).apply { barWidth = 0.55f }
@@ -128,7 +135,14 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
             setLabelCount(labels.size, false)
             labelRotationAngle = 0f
             textSize = 11f
+            textColor = textPrimary
+            axisLineColor = textSecondary
             setDrawGridLines(false)
+        }
+        chart.axisLeft.apply {
+            textColor = textSecondary
+            gridColor = textSecondary and 0x55FFFFFF.toInt() // сетка полупрозрачная
+            axisLineColor = textSecondary
         }
         chart.setExtraBottomOffset(8f)
 

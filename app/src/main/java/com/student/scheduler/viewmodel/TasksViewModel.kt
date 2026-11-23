@@ -29,7 +29,7 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
     private val _searchQuery = MutableLiveData("")
     private val _subjectFilter = MutableLiveData<Long?>(null)
     private val _onlyPending = MutableLiveData(false)
-    private val _sortMode = MutableLiveData(0)
+    private val _sortMode = MutableLiveData(app.preferences.defaultSortMode)
 
     val subjects: LiveData<List<SubjectEntity>> = scheduleRepository.observeSubjects()
 
@@ -62,6 +62,8 @@ class TasksViewModel(application: Application) : AndroidViewModel(application) {
         // Re-trigger the chain by nudging the query LiveData (sort isn't a switchMap source on its own).
         _searchQuery.value = _searchQuery.value
     }
+
+    fun currentSortMode(): Int = _sortMode.value ?: 0
 
     fun onTaskCheckedChanged(taskId: Long, isChecked: Boolean) {
         viewModelScope.launch(Dispatchers.IO) { taskRepository.setDone(taskId, isChecked) }

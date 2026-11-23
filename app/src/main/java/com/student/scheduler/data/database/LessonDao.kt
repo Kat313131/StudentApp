@@ -19,6 +19,10 @@ interface LessonDao {
     @Query("SELECT * FROM lessons ORDER BY dayOfWeek ASC, startTime ASC")
     fun observeAll(): LiveData<List<LessonWithSubject>>
 
+    @Transaction
+    @Query("SELECT * FROM lessons ORDER BY dayOfWeek ASC, startTime ASC")
+    suspend fun getAllOnce(): List<LessonWithSubject>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(lesson: LessonEntity): Long
 

@@ -19,6 +19,8 @@ class ScheduleRepository(
 
     fun observeAllLessons(): LiveData<List<LessonWithSubject>> = lessonDao.observeAll()
 
+    suspend fun getAllLessonsOnce(): List<LessonWithSubject> = lessonDao.getAllOnce()
+
     fun observeSubjects(): LiveData<List<SubjectEntity>> = subjectDao.observeAll()
 
     suspend fun getSubjects(): List<SubjectEntity> = subjectDao.getAll()
